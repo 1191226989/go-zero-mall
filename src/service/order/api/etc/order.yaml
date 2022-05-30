@@ -1,0 +1,34 @@
+Name: Order
+Host: 0.0.0.0
+Port: 8002
+
+Auth:
+  AccessSecret: uOvKLmVfztaXGpNYd4Z0I1SiT7MweJhl
+  AccessExpire: 86400
+
+OrderRpc:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: order.rpc
+
+ProductRpc:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: product.rpc
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 10082
+  Path: /metrics
+
+Telemetry:
+  Name: order.api
+  Endpoint: http://127.0.0.1:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+# dtm 服务的 etcd 注册地址
+DtmServer:
+  Address: "etcd://127.0.0.1:2379/dtmservice"

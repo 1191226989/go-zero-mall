@@ -1,0 +1,28 @@
+FROM golang:alpine AS builder
+
+LABEL stage=gobuilder
+
+ENV CGO_ENABLED 0
+# ENV GOPROXY https://goproxy.cn,direct
+ENV GOPROXY https://proxy.golang.com.cn,direct
+
+RUN apk update --no-cache && apk add --no-cache tzdata
+
+WORKDIR /build
+
+COPY . .
+RUN go mod download
+COPY service/pay/rpc/etc/pay.yaml /app/etc/pay.yaml
+RUN go build -ldflags="-s -w" -o /app/main service/pay/rpc/pay.go
+
+FROM alpine
+
+RUN apk update --no-cache && apk add --no-cache ca-certificates
+COPY --from=builder /usr/share/zoneinfo/Asia/Shanghai /usr/share/zoneinfo/Asia/Shanghai
+ENV TZ Asia/Shanghai
+
+WORKDIR /app
+COPY --from=builder /app/main /app/main
+COPY --from=builder /app/etc /app/etc
+
+CMD ["./main", "-f", "etc/pay.yaml"]

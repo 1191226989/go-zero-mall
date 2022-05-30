@@ -1,0 +1,24 @@
+Name: Pay
+Host: 0.0.0.0
+Port: 8003
+
+Auth:
+  AccessSecret: uOvKLmVfztaXGpNYd4Z0I1SiT7MweJhl
+  AccessExpire: 86400
+
+PayRpc:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: pay.rpc
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 10083
+  Path: /metrics
+
+Telemetry:
+  Name: pay.api
+  Endpoint: http://127.0.0.1:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
